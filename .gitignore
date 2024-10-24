@@ -1,0 +1,48 @@
+# Ignorar arquivos e diretórios de ambiente virtual
+venv/
+env/
+*.pyc
+__pycache__/
+
+# Ignorar arquivos de configuração do editor
+.vscode/
+.idea/
+
+# Ignorar arquivos relacionados a Jupyter Notebooks
+.ipynb_checkpoints/
+
+# Ignorar logs
+*.log
+
+# Ignorar arquivos de configuração do sistema operacional
+.DS_Store
+Thumbs.db
+
+# Ignorar arquivos de banco de dados local
+*.sqlite3
+
+# Ignorar arquivos de credenciais
+.env
+
+# Ignorar arquivos de pacotes e dependências
+*.egg-info/
+*.egg
+dist/
+build/
+pip-wheel-metadata/
+
+# Ignorar arquivos temporários criados por testes
+htmlcov/
+coverage/
+*.cover
+*.cov
+*.lcov
+nosetests.xml
+coverage.xml
+*.coveragerc
+
+# Ignorar chaves SSH
+*.pem
+
+# Ignorar pacotes instalados por pip
+__pypackages__/
