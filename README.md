@@ -13,3 +13,9 @@ A função plot_analysis_2() gera um gráfico de barras que apresenta a distribu
 Análise da Distribuição das Faixas Etárias:
 
 A função plot_analysis_3(m) é chamada para cada ministério desejado e cria um gráfico de barras mostrando a distribuição das faixas etárias dos indivíduos vinculados a esse ministério específico.
+
+## Utilização
+
+1. Criar venv
+2. Instalar requirements.txt
+3. Criar banco e fazer o restore. Está na pasta sql.
