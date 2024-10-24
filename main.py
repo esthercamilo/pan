@@ -1,3 +1,4 @@
+import json
 import os
 import pandas as pd
 from sqlalchemy import create_engine
@@ -5,6 +6,7 @@ from dotenv import load_dotenv
 import matplotlib.pyplot as plt
 import textwrap
 from datetime import datetime
+import numpy as np
 
 load_dotenv()
 
@@ -147,6 +149,8 @@ def plot_analysis_3(m):
     fulldata['idade'] = fulldata['dt_nascimento'].apply(
         lambda x: (datetime.now() - x).days // 365 if pd.notnull(x) else None)
 
+    fulldata['renda'] = pd.to_numeric(fulldata['renda'], errors='coerce')
+
     # Definir as faixas etárias
     bins = [0, 18, 30, 40, 50, 60, 70, 80, 100]  # Definir as faixas etárias
     labels = ['0-18', '19-30', '31-40', '41-50', '51-60', '61-70', '71-80', '81+']
@@ -172,16 +176,76 @@ def plot_analysis_3(m):
     if not os.path.exists('plots'):
         os.makedirs('plots')
 
+    # Salvar renda
+    with open('plots/renda.txt', 'a') as f:
+        renda_total = fulldata['renda'].sum()
+        f.write(f"{m}: {renda_total}\n")
+
     # Passo 3: Salvar o gráfico
     plt.savefig(f'plots/distribuicao_faixa_etaria_{m}.png')
     plt.close()  # Fechar a plotagem para liberar memória
 
 
-if __name__ == '__main__':
-    transfer()
-    plot_analysis_1()
-    plot_analysis_2()
+def plot_case():
 
-    ministerios_desejados = ["Ministério da Defesa", "Ministério da Economia", "Ministério da Educação"]
+    result = {}
+
+    case = pd.read_sql('select * from "case";', sqlengine())
+    # Convertendo a coluna 'Data' para datetime (se ainda não estiver)
+    case['Data'] = pd.to_datetime(case['Data'])
+
+    # Contagem de atendimentos por Canal
+    contagem_canal = case['Canal'].value_counts()
+    result['canal'] = contagem_canal.to_dict()
+
+    # Contagem de atendimentos por Segmento de Cliente
+    contagem_segmento = case['Segmento cliente'].value_counts()
+    result['segmento'] = contagem_segmento.to_dict()
+
+    # Contagem de atendimentos por Motivo de Contato
+    contagem_motivo = case['Motivo de contato'].value_counts()
+    result['motivo'] = contagem_motivo.to_dict()
+
+    # Criando gráficos
+    fig, axs = plt.subplots(3, 1, figsize=(10, 15))
+
+    # Gráfico por Canal
+    axs[0].bar(contagem_canal.index, contagem_canal.values, color='skyblue')
+    axs[0].set_title('Número de Atendimentos por Canal')
+    axs[0].set_xlabel('Canal')
+    axs[0].set_ylabel('Número de Atendimentos')
+    axs[0].grid(axis='y', linestyle='--', alpha=0.7)
+
+    # Gráfico por Segmento de Cliente
+    axs[1].bar(contagem_segmento.index, contagem_segmento.values, color='lightgreen')
+    axs[1].set_title('Número de Atendimentos por Segmento de Cliente')
+    axs[1].set_xlabel('Segmento de Cliente')
+    axs[1].set_ylabel('Número de Atendimentos')
+    axs[1].grid(axis='y', linestyle='--', alpha=0.7)
+
+    # Gráfico por Motivo de Contato
+    axs[2].bar(contagem_motivo.index, contagem_motivo.values, color='salmon')
+    axs[2].set_title('Número de Atendimentos por Motivo de Contato')
+    axs[2].set_xlabel('Motivo de Contato')
+    axs[2].set_ylabel('Número de Atendimentos')
+    axs[2].grid(axis='y', linestyle='--', alpha=0.7)
+
+    plt.tight_layout()
+
+    # Salvar o gráfico
+    plt.savefig('plots/atendimentos_por_canal_segmento_motivo.png')
+
+    # Gerar um sumário dos dados
+    with open('plots/sumario_dados.json', 'w') as f:
+        f.write(json.dumps(result))
+
+
+if __name__ == '__main__':
+    # transfer()
+    # plot_analysis_1()
+    # plot_analysis_2()
+    #
+    ministerios_desejados = ["Ministério da Defesa", "Ministério da Economia", "Ministério da Educação", "Ministério da Saúde"]
     for m in ministerios_desejados:
         plot_analysis_3(m)
+    # plot_case()

@@ -1,0 +1,17 @@
+{
+  "canal": {
+    "Chat": 1000,
+    "Voz": 500
+  },
+  "segmento": {
+    "Conta + Cart\u00e3o": 1200,
+    "Conta": 300
+  },
+  "motivo": {
+    "Cart\u00e3o fraudado": 514,
+    "PIX inoperante": 452,
+    "Acesso ao app": 196,
+    "Cart\u00e3o perdido": 191,
+    "Cart\u00e3o roubado": 147
+  }
+}
