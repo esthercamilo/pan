@@ -1,6 +1,6 @@
 # Avaliação
 
-## Descrição dos funções em main.py para resolução da PARTE 1
+## Descrição dos funções em main.py 
 
 Transferência de Dados: A função transfer() é responsável por carregar e preparar os dados para análise.
 
